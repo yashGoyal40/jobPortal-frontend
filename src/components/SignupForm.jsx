@@ -31,6 +31,7 @@ export const SignupForm = () => {
     secondNiche: "",
     thirdNiche: "",
     coverLetter: "",
+    resume:null
   });
 
   const niches = [
@@ -67,7 +68,6 @@ export const SignupForm = () => {
     "IT Consultant",
   ];
 
-  const [resume, setResume] = useState(null);
   const { toast } = useToast();
 
   const handleInputChange = (e) => {
@@ -76,7 +76,7 @@ export const SignupForm = () => {
   };
 
   const handleFileChange = (e) => {
-    setResume(e.target.files[0]);
+    setFormData((prev) => ({...prev,resume:e.target.files[0]}))
   };
 
   const { loading, isAuthenticated, error, message, isVerified } = useSelector(

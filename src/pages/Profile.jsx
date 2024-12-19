@@ -17,6 +17,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
+
 
 const initialUserData = {
   name: 'John Doe',
@@ -30,6 +32,10 @@ const initialUserData = {
 function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState(initialUserData);
+
+  const {user,loading,error,message} = useSelector(state => state.user)
+
+  console.log(user.resume)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -73,7 +79,7 @@ function ProfilePage() {
                   <Input
                     id="name"
                     name="name"
-                    value={userData.name}
+                    value={user.name}
                     onChange={handleInputChange}
                     disabled={!isEditing}
                   />
@@ -84,7 +90,7 @@ function ProfilePage() {
                     id="email"
                     name="email"
                     type="email"
-                    value={userData.email}
+                    value={user.email}
                     onChange={handleInputChange}
                     disabled={!isEditing}
                   />
@@ -95,17 +101,17 @@ function ProfilePage() {
                     id="phone"
                     name="phone"
                     type="tel"
-                    value={userData.phone}
+                    value={user.phone}
                     onChange={handleInputChange}
                     disabled={!isEditing}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="address">City</Label>
                   <Input
                     id="address"
                     name="address"
-                    value={userData.address}
+                    value={user.address}
                     onChange={handleInputChange}
                     disabled={!isEditing}
                   />
@@ -136,13 +142,13 @@ function ProfilePage() {
                 {isEditing ? (
                   <Input
                     name="resume"
-                    value={userData.resume}
+                    value={user.resume}
                     onChange={handleInputChange}
                     placeholder="Enter resume URL"
                   />
                 ) : (
                   <a
-                    href={userData.resume}
+                    href={user.resume.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:underline dark:text-blue-400"

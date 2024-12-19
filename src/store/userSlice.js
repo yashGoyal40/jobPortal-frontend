@@ -119,18 +119,18 @@ const userSlice = createSlice({
     forgotPasswordRequest(state, action) {
       state.loading = true;
       state.message = null;
-      state.otpSent = false
+      state.otpSent = false;
       state.error = null;
     },
     forgotPasswordSuccess(state, action) {
       state.loading = false;
       state.message = action.payload.message;
-      state.otpSent = true
+      state.otpSent = true;
       state.error = null;
     },
     forgotPasswordfail(state, action) {
       state.loading = false;
-      state.otpSent = false
+      state.otpSent = false;
       state.error = action.payload;
     },
     passReset(state, action) {
@@ -150,6 +150,22 @@ const userSlice = createSlice({
     passResetFail(state, action) {
       state.loading = false;
       state.error = action.payload;
+    },
+    updateUser(state, action) {
+      state.message = null;
+      state.error = null;
+      state.loading = true;
+    },
+    updateUserSuccess(state, action) {
+      state.loading = false;
+      state.error = null;
+      state.message = action.payload.message;
+      state.user = action.payload.user;
+    },
+    updateUserFalied(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+      state.user = state.user;
     },
   },
 });
@@ -265,6 +281,23 @@ export const forgotpassReset = (data) => async (dispatch) => {
     dispatch(userSlice.actions.passResetSuccess(response.data));
   } catch (error) {
     dispatch(userSlice.actions.passResetFail(error.response.data.message));
+  }
+};
+
+export const updateUser = (data) => async (dispatch) => {
+  dispatch(userSlice.actions.updateUser());
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_API_URL}/api/v1/user/update/profile`,
+      data,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    dispatch(userSlice.actions.updateUserSuccess(response.data));
+  } catch (error) {
+    dispatch(userSlice.actions.updateUserFalied(error.response.data.message));
   }
 };
 
