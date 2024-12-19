@@ -7,7 +7,7 @@ import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import myStore from "./store";
 import Hero from "./pages/Hero";
-import ProfilePage from "./pages/Profile1"; 
+import ProfilePage from "./pages/Profile"; 
 import AuthPage from "./pages/Auth";
 import JobsPage from "./pages/Jobs";
 import JobDetailsPage from "./pages/JobDetails";

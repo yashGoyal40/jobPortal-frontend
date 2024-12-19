@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Loader2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser, clearAllUserErrors } from "@/store/userSlice";
+import { useToast } from "@/hooks/use-toast";
+import { motion } from 'framer-motion';
 
 const nichesList = [
   "Fullstack Developer",
@@ -52,15 +57,18 @@ const nichesList = [
   "IT Consultant",
 ];
 
-function ProfessionalInfo({ user }) {
+function ProfessionalInfo() {
   const [isEditing, setIsEditing] = useState(false);
-
+  const { user, loading, error, message } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     resume: user?.resume || "",
     firstNiche: user?.niches?.firstNiche || "",
     secondNiche: user?.niches?.secondNiche || "",
     thirdNiche: user?.niches?.thirdNiche || "",
   });
+
+  const dispatch = useDispatch();
+  const { toast } = useToast();
 
   const handleNicheChange = (key, value) => {
     setFormData((prevData) => ({
@@ -69,11 +77,57 @@ function ProfessionalInfo({ user }) {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData((prevData) => ({
+      ...prevData,
+      resume: file || "",
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Updated Data:", formData);
+    if (
+      formData.firstNiche !== user.niches.firstNiche ||
+      formData.secondNiche !== user.niches.secondNiche ||
+      formData.thirdNiche !== user.niches.thirdNiche ||
+      formData.resume !== user.resume
+    ) {
+      dispatch(updateUser(formData));
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "The data is already the same",
+        className: "bg-red-600 text-white border border-red-700",
+      });
+    }
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error,
+        className: "bg-red-600 text-white border border-red-700",
+      });
+    }
+
+    if (message) {
+      toast({
+        variant: "success",
+        title: "Success",
+        description: message,
+        className: "bg-green-600 text-white border border-green-700",
+      });
+    }
+
+    return () => {
+      dispatch(clearAllUserErrors());
+    };
+  }, [error, message, dispatch, toast]);
 
   if (user?.role === "Employer") {
     return (
@@ -90,6 +144,12 @@ function ProfessionalInfo({ user }) {
   }
 
   return (
+    <motion.div
+      className="container mx-auto px-4 py-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
     <Card>
       <CardHeader>
         <CardTitle>Professional Information</CardTitle>
@@ -105,16 +165,11 @@ function ProfessionalInfo({ user }) {
                   name="resume"
                   type="file"
                   accept=".pdf, .doc, .docx"
-                  onChange={(e) =>
-                    setFormData((prevData) => ({
-                      ...prevData,
-                      resume: e.target.files?.[0]?.name || "",
-                    }))
-                  }
+                  onChange={handleFileChange}
                 />
-              ) : formData.resume ? (
+              ) : formData.resume?.url ? (
                 <a
-                  href="#"
+                  href={user.resume.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:underline dark:text-blue-400"
@@ -179,18 +234,31 @@ function ProfessionalInfo({ user }) {
       <CardFooter className="flex justify-between">
         {isEditing ? (
           <>
-            <Button type="submit" onClick={handleSubmit}>
+            <Button type="submit" onClick={handleSubmit} disabled={loading}>
               Save Changes
+              {loading && (
+                <Loader2 className="h-5 w-5 animate-spin text-white ml-2" />
+              )}
             </Button>
-            <Button variant="outline" onClick={() => setIsEditing(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditing(false)}
+              disabled={loading}
+            >
               Cancel
             </Button>
           </>
         ) : (
-          <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+          <Button onClick={() => setIsEditing(true)} disabled={loading}>
+            Edit Profile
+            {loading && (
+              <Loader2 className="h-5 w-5 animate-spin text-white ml-2" />
+            )}
+          </Button>
         )}
       </CardFooter>
     </Card>
+    </motion.div>
   );
 }
 

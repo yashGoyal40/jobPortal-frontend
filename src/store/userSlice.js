@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { data } from "react-router";
 
 const initialState = {
   loading: false,
@@ -43,9 +44,9 @@ const userSlice = createSlice({
     verificationSuccess(state, action) {
       state.isVerified = true;
       state.user = action.payload.user;
-      console.log(state.user);
       state.message = action.payload.message;
       state.error = null;
+      state.loading = false
     },
     VerificationFailed(state, action) {
       state.isVerified = false;
@@ -68,6 +69,7 @@ const userSlice = createSlice({
       state.isAuthenticated = false;
       state.user = {};
       state.message = action.payload;
+      state.isVerified = false;
     },
     logoutFailed(state, action) {
       state.loading = false;
@@ -165,6 +167,46 @@ const userSlice = createSlice({
     updateUserFalied(state, action) {
       state.loading = false;
       state.error = action.payload;
+      state.user = state.user;
+    },
+    updatePassword(state, action) {
+      state.loading = true;
+      state.error = null;
+      state.message = null;
+    },
+    updatePasswordSuccess(state, action) {
+      state.loading = false;
+      state.error = null;
+      state.message = action.payload.message;
+      state.user = action.payload.user;
+      state.isAuthenticated = true;
+      state.isVerified = action.payload.user.isVerified;
+    },
+    updatePasswordFail(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+      state.message = null;
+      state.user = state.user;
+      state.isAuthenticated = state.isAuthenticated;
+      state.isVerified = state.isVerified;
+    },
+    deleteUser(state, action) {
+      state.loading = true;
+      state.error = null;
+      state.message = null;
+    },
+    deleUserSuccess(state, action) {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.isAuthenticated = false;
+      state.isVerified = false;
+      state.user = {};
+    },
+    deleteUserFail(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+      state.isAuthenticated = state.isAuthenticated;
+      state.isVerified = state.isVerified;
       state.user = state.user;
     },
   },
@@ -284,6 +326,23 @@ export const forgotpassReset = (data) => async (dispatch) => {
   }
 };
 
+export const updatePassword = (data) => async (dispatch) => {
+  dispatch(userSlice.actions.updatePassword());
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_API_URL}/api/v1/user/update/password`,
+      data,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    dispatch(userSlice.actions.updatePasswordSuccess(response.data));
+  } catch (error) {
+    dispatch(userSlice.actions.updatePasswordFail(error.response.data.message));
+  }
+};
+
 export const updateUser = (data) => async (dispatch) => {
   dispatch(userSlice.actions.updateUser());
   try {
@@ -292,12 +351,27 @@ export const updateUser = (data) => async (dispatch) => {
       data,
       {
         withCredentials: true,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "multipart/form-data" },
       }
     );
     dispatch(userSlice.actions.updateUserSuccess(response.data));
   } catch (error) {
     dispatch(userSlice.actions.updateUserFalied(error.response.data.message));
+  }
+};
+
+export const deleteUser = () => async (dispatch) => {
+  dispatch(userSlice.actions.deleteUser());
+  try {
+    const response = await axios.delete(
+      `${import.meta.env.VITE_API_URL}/api/v1/user/delete`,
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch(userSlice.actions.deleUserSuccess(response.data));
+  } catch (error) {
+    dispatch(userSlice.actions.deleteUserFail(error.response.data.message));
   }
 };
 
