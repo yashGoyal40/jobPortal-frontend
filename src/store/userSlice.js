@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { data } from "react-router";
+import { resetJobSlice } from "./jobSlice";
 
 const initialState = {
   loading: false,
@@ -257,6 +257,7 @@ export const logout = () => async (dispatch) => {
     );
     dispatch(userSlice.actions.logoutSuccess(response.data.message));
     dispatch(userSlice.actions.clearAllErrors());
+    dispatch(resetJobSlice())
   } catch (error) {
     dispatch(userSlice.actions.logoutFailed(error.response.data.message));
   }

@@ -167,7 +167,7 @@ function ProfessionalInfo() {
                   accept=".pdf, .doc, .docx"
                   onChange={handleFileChange}
                 />
-              ) : formData.resume?.url ? (
+              ) : user.resume?.url ? (
                 <a
                   href={user.resume.url}
                   target="_blank"

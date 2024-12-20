@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,22 +18,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { motion } from "framer-motion";
-import { Briefcase, MapPin, Users ,IndianRupee} from "lucide-react";
+import { Briefcase, MapPin, Users, IndianRupee } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+import {
+  PostJob,
+  clearAllJObErrors,
+  clearAllJobMessage,
+} from "@/store/jobSlice";
+import NotAuthenticated from "@/components/NotAuthenticater";
 
 export default function PostJobPage() {
+
+  const {user,isAuthenticated,isVerified} = useSelector((state) => state.user)
+
+
+
   const [jobData, setJobData] = useState({
     title: "",
     companyName: "",
     location: "",
-    jobType: "",
-    responsibilities: "",
-    qualifications: "",
+    jobType: "Full-time",
+    responsibilities: [],
+    qualifications: [],
     salary: "",
     hiringMultipleCandidates: "No",
     personalWebsiteTitle: "",
     personalWebsiteUrl: "",
     jobNiche: "",
     newsLettersSent: false,
+    offers: [],
+    introduction: "",
   });
 
   const handleInputChange = (e) => {
@@ -41,18 +57,95 @@ export default function PostJobPage() {
     setJobData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleArrayChange = (name, index, value) => {
+    setJobData((prevData) => {
+      const updatedArray = [...prevData[name]];
+      updatedArray[index] = value; 
+      return { ...prevData, [name]: updatedArray };
+    });
+  };
+  
+  const handleAddItem = (name) => {
+    setJobData((prevData) => ({
+      ...prevData,
+      [name]: [...prevData[name], ""],
+    }));
+  };
+  
+  const handleRemoveItem = (name, index) => {
+    setJobData((prevData) => {
+      const updatedArray = prevData[name].filter((_, i) => i !== index);
+      return { ...prevData, [name]: updatedArray };
+    });
+  };
+  
+
   const handleSelectChange = (name, value) => {
     setJobData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSwitchChange = (name, checked) => {
-    setJobData((prevData) => ({ ...prevData, [name]: checked }));
-  };
+  const { loading, error, message } = useSelector((state) => state.jobs);
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error,
+        className: "bg-red-600 text-white border border-red-700",
+      });
+    }
+
+    if (message) {
+      toast({
+        variant: "success",
+        title: "Success",
+        description: message,
+        className: "bg-green-600 text-white border border-green-700",
+      });
+    }
+
+    return () => {
+      dispatch(clearAllJObErrors());
+      dispatch(clearAllJobMessage());
+    };
+  }, [error, message, dispatch, toast]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add logic to submit the form, making sure to validate all required fields
+    dispatch(PostJob(jobData))
+    if (!loading && !error) {
+      setJobData({
+        title: "",
+        companyName: "",
+        location: "",
+        jobType: "Full-time",
+        responsibilities: [],
+        qualifications: [],
+        salary: "",
+        hiringMultipleCandidates: "No",
+        personalWebsiteTitle: "",
+        personalWebsiteUrl: "",
+        jobNiche: "",
+        newsLettersSent: false,
+        offers: [],
+        introduction: "",
+      });
+    }
   };
+
+  if(!isAuthenticated ){
+    return(
+     <NotAuthenticated /> 
+    )
+  }
+  if(user && user.role === "Job seeker"){
+    return(
+      <NotAuthenticated reason={"Only Employer can Post Jobs"} /> 
+     )
+  }
 
   return (
     <motion.div
@@ -144,13 +237,13 @@ export default function PostJobPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="responsibilities" className="text-lg">
-                  Responsibilities <span className="text-red-500">*</span>
+                <Label htmlFor="introduction" className="text-lg">
+                  Job Description <span className="text-red-500">*</span>
                 </Label>
                 <Textarea
-                  id="responsibilities"
-                  name="responsibilities"
-                  value={jobData.responsibilities}
+                  id="introduction"
+                  name="introduction"
+                  value={jobData.introduction}
                   onChange={handleInputChange}
                   required
                   className="h-32"
@@ -158,17 +251,83 @@ export default function PostJobPage() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="responsibilities" className="text-lg">
+                  Responsibilities <span className="text-red-500">*</span>
+                </Label>
+                {jobData.responsibilities.map((responsibility, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <Input
+                      value={responsibility}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "responsibilities",
+                          index,
+                          e.target.value
+                        )
+                      }
+                      placeholder={`Responsibility ${index + 1}`}
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() =>
+                        handleRemoveItem("responsibilities", index)
+                      }
+                      className="text-red-500"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <br />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleAddItem("responsibilities")}
+                  className="text-blue-500"
+                >
+                  Add Responsibility
+                </Button>
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="qualifications" className="text-lg">
                   Qualifications <span className="text-red-500">*</span>
                 </Label>
-                <Textarea
-                  id="qualifications"
-                  name="qualifications"
-                  value={jobData.qualifications}
-                  onChange={handleInputChange}
-                  required
-                  className="h-32"
-                />
+                {jobData.qualifications.map((qualification, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <Input
+                      value={qualification}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "qualifications",
+                          index,
+                          e.target.value
+                        )
+                      }
+                      placeholder={`Qualification ${index + 1}`}
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleRemoveItem("qualifications", index)}
+                      className="text-red-500"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <br />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleAddItem("qualifications")}
+                  className="text-blue-500"
+                >
+                  Add Qualification
+                </Button>
               </div>
 
               <div className="space-y-2">
@@ -183,10 +342,44 @@ export default function PostJobPage() {
                     value={jobData.salary}
                     onChange={handleInputChange}
                     className="pl-10"
-                    type="number"
                     required
                   />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="offers" className="text-lg">
+                  Offers <span className="text-red-500">*</span>
+                </Label>
+                {jobData.offers.map((offer, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <Input
+                      value={offer}
+                      onChange={(e) =>
+                        handleArrayChange("offers", index, e.target.value)
+                      }
+                      placeholder={`Offer ${index + 1}`}
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleRemoveItem("offers", index)}
+                      className="text-red-500"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <br />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleAddItem("offers")}
+                  className="text-blue-500"
+                >
+                  Add Offer
+                </Button>
               </div>
 
               <div className="space-y-2">
@@ -333,8 +526,16 @@ export default function PostJobPage() {
             </form>
           </CardContent>
           <CardFooter className="flex justify-center">
-            <Button type="submit" onClick={handleSubmit} className="w-1/4">
+            <Button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-1/4"
+            >
               Post Job
+              {loading && (
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              )}
             </Button>
           </CardFooter>
         </Card>

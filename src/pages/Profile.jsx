@@ -7,6 +7,7 @@ import PersonalInfo from '@/components/PersonalInfo';
 import ProfessionalInfo from '@/components/ProfessionalInfo';
 import AccountSettings from '@/components/AccountSettings';
 import { useToast } from '@/hooks/use-toast';
+import NotAuthenticated from '@/components/NotAuthenticater';
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -15,7 +16,9 @@ function ProfilePage() {
 
 
   if (!isAuthenticated) {    
-    return null;
+    return(
+      <NotAuthenticated />
+    )
   }
 
   return (
