@@ -36,21 +36,21 @@ export default function MyJobsPage() {
   const dispatch = useDispatch();
   const { toast } = useToast();
 
-  const {user,isAuthenticated,isVerified} = useSelector((state) => state.user)
-
-  
+  const { user, isAuthenticated, isVerified } = useSelector(
+    (state) => state.user
+  );
 
   const { loading, myJobs, error, message } = useSelector(
     (state) => state.jobs
   );
 
   const handleDelete = (id) => {
-    dispatch(deleteJob(id))
-  }
+    dispatch(deleteJob(id));
+  };
 
   useEffect(() => {
     dispatch(fetchMyJobs());
-  }, [dispatch,loading]);
+  }, [dispatch, loading]);
 
   useEffect(() => {
     if (error) {
@@ -77,23 +77,16 @@ export default function MyJobsPage() {
     };
   }, [error, message, dispatch, toast]);
 
-
-  if(!isAuthenticated){
-    return(
-     <NotAuthenticated /> 
-    )
+  if (!isAuthenticated) {
+    return <NotAuthenticated />;
   }
-  if(user && user.role === "Job seeker"){
-    return(
-      <NotAuthenticated reason={"Only Employer Can Post Jobs"} /> 
-     )
+  if (user && user.role === "Job seeker") {
+    return <NotAuthenticated reason={"Only Employer Can Post Jobs"} />;
   }
 
   if (!loading && myJobs.length === 0) {
-    return <JobNotFound emoployer={true}/>;
+    return <JobNotFound emoployer={true} />;
   }
-
-
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -119,7 +112,7 @@ export default function MyJobsPage() {
               <CardContent>
                 <p className="text-gray-600 dark:text-gray-300">
                   Posted on:{" "}
-                  {new Date(job.createdAt).toLocaleDateString("en-US", {
+                  {new Date(job.createdAt).toLocaleDateString("en-GB", {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
@@ -159,7 +152,9 @@ export default function MyJobsPage() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleDelete(job._id)}>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(job._id)}
+                        >
                           Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>

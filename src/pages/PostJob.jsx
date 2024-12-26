@@ -30,10 +30,9 @@ import {
 import NotAuthenticated from "@/components/NotAuthenticater";
 
 export default function PostJobPage() {
-
-  const {user,isAuthenticated,isVerified} = useSelector((state) => state.user)
-
-
+  const { user, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
 
   const [jobData, setJobData] = useState({
     title: "",
@@ -60,25 +59,24 @@ export default function PostJobPage() {
   const handleArrayChange = (name, index, value) => {
     setJobData((prevData) => {
       const updatedArray = [...prevData[name]];
-      updatedArray[index] = value; 
+      updatedArray[index] = value;
       return { ...prevData, [name]: updatedArray };
     });
   };
-  
+
   const handleAddItem = (name) => {
     setJobData((prevData) => ({
       ...prevData,
       [name]: [...prevData[name], ""],
     }));
   };
-  
+
   const handleRemoveItem = (name, index) => {
     setJobData((prevData) => {
       const updatedArray = prevData[name].filter((_, i) => i !== index);
       return { ...prevData, [name]: updatedArray };
     });
   };
-  
 
   const handleSelectChange = (name, value) => {
     setJobData((prevData) => ({ ...prevData, [name]: value }));
@@ -115,7 +113,7 @@ export default function PostJobPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(PostJob(jobData))
+    dispatch(PostJob(jobData));
     if (!loading && !error) {
       setJobData({
         title: "",
@@ -136,15 +134,11 @@ export default function PostJobPage() {
     }
   };
 
-  if(!isAuthenticated ){
-    return(
-     <NotAuthenticated /> 
-    )
+  if (!isAuthenticated) {
+    return <NotAuthenticated />;
   }
-  if(user && user.role === "Job seeker"){
-    return(
-      <NotAuthenticated reason={"Only Employer can Post Jobs"} /> 
-     )
+  if (user && user.role === "Job seeker") {
+    return <NotAuthenticated reason={"Only Employer can Post Jobs"} />;
   }
 
   return (
@@ -439,87 +433,87 @@ export default function PostJobPage() {
                     <SelectValue placeholder="Select Job Niche" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Fullstack Developer">
-                      Fullstack Developer
-                    </SelectItem>
-                    <SelectItem value="Frontend Developer">
-                      Frontend Developer
-                    </SelectItem>
-                    <SelectItem value="Backend Developer">
-                      Backend Developer
-                    </SelectItem>
-                    <SelectItem value="System Administrator">
-                      System Administrator
-                    </SelectItem>
-                    <SelectItem value="DevOps Engineer">
-                      DevOps Engineer
-                    </SelectItem>
-                    <SelectItem value="Site Reliability Engineer (SRE)">
-                      Site Reliability Engineer (SRE)
-                    </SelectItem>
-                    <SelectItem value="Cloud Engineer">
-                      Cloud Engineer
-                    </SelectItem>
-                    <SelectItem value="Machine Learning Engineer">
-                      Machine Learning Engineer
-                    </SelectItem>
-                    <SelectItem value="Game Developer">
-                      Game Developer
+                    <SelectItem value="AI Engineer">AI Engineer</SelectItem>
+                    <SelectItem value="AR/VR Developer">
+                      AR/VR Developer
                     </SelectItem>
                     <SelectItem value="Android Developer">
                       Android Developer
                     </SelectItem>
-                    <SelectItem value="iOS Developer">iOS Developer</SelectItem>
                     <SelectItem value="Application Developer">
                       Application Developer
                     </SelectItem>
-                    <SelectItem value="Data Scientist">
-                      Data Scientist
+                    <SelectItem value="Backend Developer">
+                      Backend Developer
                     </SelectItem>
-                    <SelectItem value="Data Engineer">Data Engineer</SelectItem>
                     <SelectItem value="Big Data Engineer">
                       Big Data Engineer
                     </SelectItem>
-                    <SelectItem value="AI Engineer">AI Engineer</SelectItem>
                     <SelectItem value="Blockchain Developer">
                       Blockchain Developer
+                    </SelectItem>
+                    <SelectItem value="Cloud Engineer">
+                      Cloud Engineer
                     </SelectItem>
                     <SelectItem value="Cybersecurity Specialist">
                       Cybersecurity Specialist
                     </SelectItem>
-                    <SelectItem value="QA Engineer">QA Engineer</SelectItem>
-                    <SelectItem value="Test Automation Engineer">
-                      Test Automation Engineer
-                    </SelectItem>
-                    <SelectItem value="IT Support Specialist">
-                      IT Support Specialist
-                    </SelectItem>
-                    <SelectItem value="Network Engineer">
-                      Network Engineer
+                    <SelectItem value="Data Engineer">Data Engineer</SelectItem>
+                    <SelectItem value="Data Scientist">
+                      Data Scientist
                     </SelectItem>
                     <SelectItem value="Database Administrator">
                       Database Administrator
                     </SelectItem>
-                    <SelectItem value="UI/UX Designer">
-                      UI/UX Designer
-                    </SelectItem>
-                    <SelectItem value="Product Manager">
-                      Product Manager
-                    </SelectItem>
-                    <SelectItem value="Scrum Master">Scrum Master</SelectItem>
-                    <SelectItem value="Solutions Architect">
-                      Solutions Architect
-                    </SelectItem>
-                    <SelectItem value="Technical Writer">
-                      Technical Writer
-                    </SelectItem>
-                    <SelectItem value="AR/VR Developer">
-                      AR/VR Developer
+                    <SelectItem value="DevOps Engineer">
+                      DevOps Engineer
                     </SelectItem>
                     <SelectItem value="Embedded Systems Engineer">
                       Embedded Systems Engineer
                     </SelectItem>
+                    <SelectItem value="Frontend Developer">
+                      Frontend Developer
+                    </SelectItem>
+                    <SelectItem value="Fullstack Developer">
+                      Fullstack Developer
+                    </SelectItem>
+                    <SelectItem value="Game Developer">
+                      Game Developer
+                    </SelectItem>
                     <SelectItem value="IT Consultant">IT Consultant</SelectItem>
+                    <SelectItem value="IT Support Specialist">
+                      IT Support Specialist
+                    </SelectItem>
+                    <SelectItem value="iOS Developer">iOS Developer</SelectItem>
+                    <SelectItem value="Machine Learning Engineer">
+                      Machine Learning Engineer
+                    </SelectItem>
+                    <SelectItem value="Network Engineer">
+                      Network Engineer
+                    </SelectItem>
+                    <SelectItem value="Product Manager">
+                      Product Manager
+                    </SelectItem>
+                    <SelectItem value="QA Engineer">QA Engineer</SelectItem>
+                    <SelectItem value="Scrum Master">Scrum Master</SelectItem>
+                    <SelectItem value="Site Reliability Engineer (SRE)">
+                      Site Reliability Engineer (SRE)
+                    </SelectItem>
+                    <SelectItem value="Solutions Architect">
+                      Solutions Architect
+                    </SelectItem>
+                    <SelectItem value="System Administrator">
+                      System Administrator
+                    </SelectItem>
+                    <SelectItem value="Technical Writer">
+                      Technical Writer
+                    </SelectItem>
+                    <SelectItem value="Test Automation Engineer">
+                      Test Automation Engineer
+                    </SelectItem>
+                    <SelectItem value="UI/UX Designer">
+                      UI/UX Designer
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -14,6 +14,13 @@ function ProfilePage() {
   const { isAuthenticated, isVerified, user } = useSelector((state) => state.user);
   const { toast } = useToast();
 
+  useEffect(() => {
+    if (isAuthenticated && !isVerified) {
+      navigate(`confirm/${user.email}`); 
+    }
+  }, [isAuthenticated, isVerified, navigate]);
+
+
 
   if (!isAuthenticated) {    
     return(

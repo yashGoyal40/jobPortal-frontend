@@ -36,7 +36,7 @@ function AccountSettings() {
   const { toast } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, loading, error, message } = useSelector((state) => state.user);
+  const { user, loading, error, message ,isAuthenticated,isVerified} = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -150,6 +150,7 @@ function AccountSettings() {
                 )}
               </Button>
             </form>
+            {isAuthenticated && !isVerified && <div>verify your account</div>}
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-2">Delete Account</h3>
