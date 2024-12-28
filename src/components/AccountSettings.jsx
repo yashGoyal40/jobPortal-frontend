@@ -25,18 +25,24 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router";
-import { clearAllUserErrors, deleteUser, updatePassword } from "@/store/userSlice";
+import {
+  clearAllUserErrors,
+  deleteUser,
+  updatePassword,
+} from "@/store/userSlice";
 
 function AccountSettings() {
   const handleDeleteAccount = () => {
-    dispatch(deleteUser())
-    navigate("/")
+    dispatch(deleteUser());
+    navigate("/");
   };
 
   const { toast } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, loading, error, message ,isAuthenticated,isVerified} = useSelector((state) => state.user);
+  const { loading, error, message, isAuthenticated, isVerified } = useSelector(
+    (state) => state.user
+  );
 
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -115,35 +121,45 @@ function AccountSettings() {
           <div>
             <h3 className="text-lg font-semibold mb-2">Change Password</h3>
             <form className="space-y-4" onSubmit={onPasswordChange}>
-              {["oldPassword", "newPassword", "confirmPassword"].map((field) => (
-                <div key={field} className="space-y-2 relative">
-                  <Label htmlFor={field}>
-                    {field === "oldPassword"
-                      ? "Current Password"
-                      : field === "newPassword"
-                      ? "New Password"
-                      : "Confirm New Password"}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id={field}
-                      type={showPasswords[field] ? "text" : "password"}
-                      value={formData[field]}
-                      onChange={handlePassChange}
-                    />
-                    <motion.button
-                      type="button"
-                      className="absolute inset-y-0 right-2 flex items-center text-gray-500"
-                      onClick={() => togglePasswordVisibility(field)}
-                      whileHover={{ scale: 1.2 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      {showPasswords[field] ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </motion.button>
+              {["oldPassword", "newPassword", "confirmPassword"].map(
+                (field) => (
+                  <div key={field} className="space-y-2 relative">
+                    <Label htmlFor={field}>
+                      {field === "oldPassword"
+                        ? "Current Password"
+                        : field === "newPassword"
+                        ? "New Password"
+                        : "Confirm New Password"}
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id={field}
+                        type={showPasswords[field] ? "text" : "password"}
+                        value={formData[field]}
+                        onChange={handlePassChange}
+                      />
+                      <motion.button
+                        type="button"
+                        className="absolute inset-y-0 right-2 flex items-center text-gray-500"
+                        onClick={() => togglePasswordVisibility(field)}
+                        whileHover={{ scale: 1.2 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        {showPasswords[field] ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </motion.button>
+                    </div>
                   </div>
-                </div>
-              ))}
-              <Button type="submit" onClick={onPasswordChange} disabled={loading}>
+                )
+              )}
+              <Button
+                type="submit"
+                onClick={onPasswordChange}
+                disabled={loading}
+              >
                 Change Password
                 {loading && (
                   <Loader2 className="h-5 w-5 animate-spin text-white ml-2" />

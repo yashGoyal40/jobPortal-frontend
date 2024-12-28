@@ -93,14 +93,14 @@ export default function JobDetailsPage() {
       transition={{ duration: 0.5 }}
     >
       <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-white">
-        {job.title}
+        {job?.title}
       </h1>
       <div className="mb-6">
         <p className="text-xl text-gray-600 dark:text-gray-300">
-          {job.companyName}
+          {job?.companyName}
         </p>
         <p className="text-gray-500 dark:text-gray-400">
-          {job.location} • {job.jobType}
+          {job?.location} • {job?.jobType}
         </p>
       </div>
       <div className="grid md:grid-cols-3 gap-8">
@@ -110,7 +110,7 @@ export default function JobDetailsPage() {
               Job Description
             </h2>
             <p className="text-gray-600 dark:text-gray-300">
-              {job.introduction}
+              {job?.introduction}
             </p>
           </section>
           <section className="mb-8">
@@ -118,7 +118,7 @@ export default function JobDetailsPage() {
               Responsibilities
             </h2>
             <ul className="list-disc pl-5 text-gray-600 dark:text-gray-300">
-              {job.responsibilities.map((resp, index) => (
+              {job?.responsibilities.map((resp, index) => (
                 <li key={index}>{resp}</li>
               ))}
             </ul>
@@ -128,7 +128,7 @@ export default function JobDetailsPage() {
               Qualifications
             </h2>
             <ul className="list-disc pl-5 text-gray-600 dark:text-gray-300">
-              {job.qualifications.map((qual, index) => (
+              {job?.qualifications.map((qual, index) => (
                 <li key={index}>{qual}</li>
               ))}
             </ul>
@@ -138,30 +138,30 @@ export default function JobDetailsPage() {
               Perks & Benefits
             </h2>
             <ul className="list-disc pl-5 text-gray-600 dark:text-gray-300">
-              {job.offers.map((offer, index) => (
+              {job?.offers.map((offer, index) => (
                 <li key={index}>{offer}</li>
               ))}
             </ul>
           </section>
           <section className="mt-4 text-gray-600 dark:text-gray-300">
             <p>
-              <strong>Salary:</strong> {job.salary}
+              <strong>Salary:</strong> {job?.salary}
             </p>
             <p>
               <strong>Hiring Multiple Candidates:</strong>{" "}
-              {job.hiringMultipleCandidates}
+              {job?.hiringMultipleCandidates}
             </p>
             <p>
-              <strong>Job Niche:</strong> {job.jobNiche}
+              <strong>Job Niche:</strong> {job?.jobNiche}
             </p>
             <p>
               <a
-                href={job.personalWebsite?.url}
+                href={job?.personalWebsite?.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500"
               >
-                {job.personalWebsite?.title}
+                {job?.personalWebsite?.title}
               </a>
             </p>
           </section>

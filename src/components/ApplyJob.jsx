@@ -20,7 +20,7 @@ import { useNavigate } from "react-router";
 function ApplyJob({ job }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const employer = user.role === "Employer";
+  const employer = user?.role === "Employer";
   const { error, message, loading } = useSelector(
     (state) => state.applications
   );
@@ -46,7 +46,7 @@ function ApplyJob({ job }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(ApplyAJob(formData, job._id));
+    dispatch(ApplyAJob(formData, job?._id));
 
     if (!error && !loading) {
       setFormData({
@@ -81,7 +81,7 @@ function ApplyJob({ job }) {
     }
   }, [error, message, toast, dispatch]);
 
-  const hasApplied = user.appliedJobs.includes(job._id);
+  const hasApplied = user.appliedJobs.includes(job?._id);
 
   return (
     <motion.div
@@ -120,7 +120,7 @@ function ApplyJob({ job }) {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Apply for {job.title}</DialogTitle>
+                <DialogTitle>Apply for {job?.title}</DialogTitle>
               </DialogHeader>
               <form className="space-y-4" onSubmit={onSubmit}>
                 <div>

@@ -64,7 +64,7 @@ export default function ApplicationsPage() {
     );
   }
 
-  if (MyApplications.length === 0) {
+  if (MyApplications?.length === 0) {
     return <ApplicationsNotFound />;
   }
   return (
@@ -83,7 +83,7 @@ export default function ApplicationsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {MyApplications.map((application) => (
+          {MyApplications?.map((application) => (
             <ApplicationCard
               key={application._id}
               application={application}

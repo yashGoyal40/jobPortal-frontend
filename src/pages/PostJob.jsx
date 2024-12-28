@@ -137,7 +137,7 @@ export default function PostJobPage() {
   if (!isAuthenticated) {
     return <NotAuthenticated />;
   }
-  if (user && user.role === "Job seeker") {
+  if (user && user?.role === "Job seeker") {
     return <NotAuthenticated reason={"Only Employer can Post Jobs"} />;
   }
 

@@ -80,7 +80,7 @@ export default function MyJobsPage() {
   if (!isAuthenticated) {
     return <NotAuthenticated />;
   }
-  if (user && user.role === "Job seeker") {
+  if (user && user?.role === "Job seeker") {
     return <NotAuthenticated reason={"Only Employer Can Post Jobs"} />;
   }
 
@@ -104,7 +104,7 @@ export default function MyJobsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {myJobs.map((job) => (
+          {myJobs?.map((job) => (
             <Card key={job._id} className="h-full flex flex-col">
               <CardHeader>
                 <CardTitle>{job.title}</CardTitle>

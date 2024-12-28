@@ -21,10 +21,10 @@ function PersonalInfo() {
   const { user, loading, error, message } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-    address: user.address,
+    name: user?.name,
+    email: user?.email,
+    phone: user?.phone,
+    address: user?.address,
   });
 
   const dispatch = useDispatch();

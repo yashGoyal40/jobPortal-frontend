@@ -130,13 +130,13 @@ const JobsPage = () => {
             </div>
           ) : (
             <motion.div
-              key={jobs.length}
+              key={jobs?.length}
               className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {jobs.length > 0 ? (
+              {jobs?.length > 0 ? (
                 jobs.map((job) => <JobCard key={job._id} job={job} />)
               ) : (
                 <p className="text-xl text-gray-500 dark:text-gray-300 col-span-full text-center py-12">

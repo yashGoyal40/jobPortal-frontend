@@ -62,7 +62,7 @@ export default function ApplicationDetailsPage() {
     )
   }
 
-  const formattedDate = new Date(singleApplication.createdAt).toLocaleDateString('en-GB', {
+  const formattedDate = new Date(singleApplication?.createdAt).toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -81,19 +81,19 @@ export default function ApplicationDetailsPage() {
       <Card className="shadow-lg">
         <CardHeader className="bg-gray-100 dark:bg-gray-800">
           <CardTitle className="text-2xl text-gray-800 dark:text-white">
-            {singleApplication.jobInfo?.jobTitle} at {singleApplication.jobInfo?.companyName}
+            {singleApplication?.jobInfo?.jobTitle} at {singleApplication?.jobInfo?.companyName}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 p-6">
           <DetailSection title="Application Status" content={singleApplication?.status} />
           <DetailSection title="Applied Date" content={formattedDate} />
-          <DetailSection title="Cover Letter" content={singleApplication.jobSeekerInfo?.coverLetter} />
+          <DetailSection title="Cover Letter" content={singleApplication?.jobSeekerInfo?.coverLetter} />
           
           <DetailSection
             title="Resume"
             content={
               <a
-                href={singleApplication.jobSeekerInfo?.resume?.url}
+                href={singleApplication?.jobSeekerInfo?.resume?.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"
@@ -106,10 +106,10 @@ export default function ApplicationDetailsPage() {
             title="Job Seeker Info"
             content={
               <>
-                <p><strong>Name:</strong> {singleApplication.jobSeekerInfo?.name}</p>
-                <p><strong>Email:</strong> {singleApplication.jobSeekerInfo?.email}</p>
-                <p><strong>Phone:</strong> {singleApplication.jobSeekerInfo?.phone}</p>
-                <p><strong>Address:</strong> {singleApplication.jobSeekerInfo?.address}</p>
+                <p><strong>Name:</strong> {singleApplication?.jobSeekerInfo?.name}</p>
+                <p><strong>Email:</strong> {singleApplication?.jobSeekerInfo?.email}</p>
+                <p><strong>Phone:</strong> {singleApplication?.jobSeekerInfo?.phone}</p>
+                <p><strong>Address:</strong> {singleApplication?.jobSeekerInfo?.address}</p>
               </>
             }
           />

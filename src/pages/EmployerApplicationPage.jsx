@@ -112,7 +112,7 @@ export default function ViewApplicationsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {MyApplications.map((application) => (
+        {MyApplications?.map((application) => (
           <Card key={application._id} className="h-full flex flex-col">
             <CardHeader>
               <CardTitle className="text-2xl">
