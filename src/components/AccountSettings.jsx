@@ -176,7 +176,7 @@ function AccountSettings() {
             </p>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={loading} className="bg-red-600">
+                <Button variant="destructive" disabled={loading} className="bg-red-600 hover:bg-red-800">
                   Delete Account
                   {loading && (
                     <Loader2 className="h-5 w-5 animate-spin text-white ml-2" />
@@ -196,6 +196,7 @@ function AccountSettings() {
                   <AlertDialogAction
                     onClick={handleDeleteAccount}
                     disabled={loading}
+                    className="bg-red-600"
                   >
                     Delete Account
                     {loading && (
