@@ -196,7 +196,7 @@ function AccountSettings() {
                   <AlertDialogAction
                     onClick={handleDeleteAccount}
                     disabled={loading}
-                    className="bg-red-600"
+                    className="bg-red-600 hover:bg-red-800"
                   >
                     Delete Account
                     {loading && (
