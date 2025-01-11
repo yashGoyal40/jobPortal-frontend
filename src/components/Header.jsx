@@ -25,12 +25,20 @@ export default function Header({ theme, toggleTheme }) {
       dispatch(clearAllUserErrors());
     }
     if (message) {
-      toast({
-        variant: "success",
-        title: "Success",
-        description: message,
-        className: "bg-green-600 text-white border border-green-700",
-      });
+      if (message === "Welcome Visitor") {
+        toast({
+          variant: "success",
+          title: message,
+          className: "bg-green-600 text-white border border-green-700",
+        });
+      } else {
+        toast({
+          variant: "success",
+          title: "success",
+          description: message,
+          className: "bg-green-600 text-white border border-green-700",
+        });
+      }
     }
   }, [isAuthenticated, error, message, dispatch]);
 

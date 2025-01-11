@@ -46,7 +46,7 @@ const userSlice = createSlice({
       state.user = action.payload.user;
       state.message = action.payload.message;
       state.error = null;
-      state.loading = false
+      state.loading = false;
     },
     VerificationFailed(state, action) {
       state.isVerified = false;
@@ -209,6 +209,9 @@ const userSlice = createSlice({
       state.isVerified = state.isVerified;
       state.user = state.user;
     },
+    wellcomeNewVisitor(state, action) {
+      state.message = "Welcome Visitor";
+    },
   },
 });
 
@@ -257,22 +260,33 @@ export const logout = () => async (dispatch) => {
     );
     dispatch(userSlice.actions.logoutSuccess(response.data.message));
     dispatch(userSlice.actions.clearAllErrors());
-    dispatch(resetJobSlice())
+    dispatch(resetJobSlice());
   } catch (error) {
     dispatch(userSlice.actions.logoutFailed(error.response.data.message));
   }
 };
 
 export const fetchUser = () => async (dispatch) => {
-  dispatch(userSlice.actions.fetchUser());
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/v1/user/getUser`,
-      { withCredentials: true }
-    );
-    dispatch(userSlice.actions.fetchUserSuccess(response.data));
-  } catch (error) {
-    dispatch(userSlice.actions.fetchUserFail(error.response.data.message));
+  const cookies = document.cookie.split("; ").reduce((acc, cookie) => {
+    const [key, value] = cookie.split("=");
+    acc[key] = value;
+    return acc;
+  }, {});
+
+  if (!cookies.token) {
+    dispatch(userSlice.actions.wellcomeNewVisitor());
+  } else {
+    dispatch(userSlice.actions.fetchUser());
+
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/user/getUser`,
+        { withCredentials: true }
+      );
+      dispatch(userSlice.actions.fetchUserSuccess(response.data));
+    } catch (error) {
+      dispatch(userSlice.actions.fetchUserFail(error.response.data.message));
+    }
   }
 };
 
